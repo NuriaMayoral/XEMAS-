@@ -1,3 +1,3 @@
 No subir los datasets como tal.
 
-En el readme especificar que datos tenemos y poner donde descargarlos. Mirar repositorio de la asignatura (el readme).
+En el README. especificar que datos tenemos y poner donde descargarlos. Mirar repositorio de la asignatura (el readme).
