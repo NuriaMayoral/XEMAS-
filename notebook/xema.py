@@ -165,3 +165,61 @@ def download_indicators(start, end):
     })
     out.to_csv(cache, index=False)
     return out
+
+
+INE_URL = "https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/{table}"
+# INE table 50905: monthly national CPI by subclass (base 2021), 2002-2025.
+# (Table 50937 in the brief is the annual version of the same data.)
+CPI_BASE = {
+    "olive_oil": "Nacional. Aceite de oliva",
+    "fresh_fruit": "Nacional. Frutas frescas o refrigeradas",
+    "fresh_vegetables": ("Nacional. Legumbres y hortalizas frescas o refrigeradas, "
+                         "excepto patatas y otros tubérculos"),
+    "general": "Nacional. Índice general",
+}
+
+
+def download_cpi(table=50905, nult=400):
+    """Monthly CPI index and annual change (%) for the series in CPI_BASE (INE)."""
+    RAW.mkdir(parents=True, exist_ok=True)
+    cache = RAW / f"cpi_{table}.csv"
+    if cache.exists():
+        return pd.read_csv(cache, parse_dates=["date"])
+
+    resp = requests.get(INE_URL.format(table=table), params={"nult": nult}, timeout=180)
+    resp.raise_for_status()
+    series = {s["Nombre"].strip(): s["Data"] for s in resp.json()}
+    cols = {}
+    for key, base in CPI_BASE.items():
+        for suffix, label in (("Índice.", "index"), ("Variación anual.", "yoy")):
+            name = f"{base}. {suffix}"
+            if name not in series:
+                raise KeyError(f"series not found in table {table}: {name}")
+            dates = pd.to_datetime([p["Fecha"] for p in series[name]], unit="ms", utc=True)
+            dates = dates.tz_convert("Europe/Madrid").tz_localize(None)
+            dates = dates.to_period("M").to_timestamp()
+            cols[f"{key}_{label}"] = pd.Series([p["Valor"] for p in series[name]], index=dates)
+    out = pd.DataFrame(cols).sort_index().rename_axis("date").reset_index()
+    out.to_csv(cache, index=False)
+    return out
+
+
+OPENMETEO_URL = "https://archive-api.open-meteo.com/v1/archive"
+
+
+def download_rain_openmeteo(name, lat, lon, start, end):
+    """Daily precipitation (mm) of one grid point from Open-Meteo (reanalysis, no key)."""
+    RAW.mkdir(parents=True, exist_ok=True)
+    cache = RAW / f"rain_openmeteo_{name}_{start}_{end}.csv"
+    if cache.exists():
+        return pd.read_csv(cache, parse_dates=["date"])
+
+    params = {"latitude": lat, "longitude": lon, "start_date": start, "end_date": end,
+              "daily": "precipitation_sum", "timezone": "Europe/Madrid"}
+    resp = requests.get(OPENMETEO_URL, params=params, timeout=90)
+    resp.raise_for_status()
+    daily = resp.json()["daily"]
+    out = pd.DataFrame({"date": pd.to_datetime(daily["time"]),
+                        "value": daily["precipitation_sum"]})
+    out.to_csv(cache, index=False)
+    return out
