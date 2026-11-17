@@ -138,3 +138,30 @@ def download_reservoirs(start, end, page=50_000):
     })
     out.to_csv(cache, index=False)
     return out
+
+
+INDICATORS_URL = "https://analisi.transparenciacatalunya.cat/resource/j7xc-3kfh.json"
+
+
+def download_indicators(start, end):
+    """Monthly Catalan energy indicators (GWh): net electricity exchange balance and demand."""
+    RAW.mkdir(parents=True, exist_ok=True)
+    cache = RAW / f"indicators_{start}_{end}.csv"
+    if cache.exists():
+        return pd.read_csv(cache, parse_dates=["date"])
+
+    params = {
+        "$select": "data,cdeebc_saldointercanvielectr,cdeebc_demandaelectr",
+        "$where": f"data >= '{start}T00:00:00' AND data <= '{end}T23:59:59'",
+        "$order": "data", "$limit": 5000,
+    }
+    resp = requests.get(INDICATORS_URL, params=params, timeout=60)
+    resp.raise_for_status()
+    raw = pd.DataFrame(resp.json())
+    out = pd.DataFrame({
+        "date": pd.to_datetime(raw["data"]),
+        "net_imports_gwh": pd.to_numeric(raw["cdeebc_saldointercanvielectr"]),
+        "demand_gwh": pd.to_numeric(raw["cdeebc_demandaelectr"]),
+    })
+    out.to_csv(cache, index=False)
+    return out
