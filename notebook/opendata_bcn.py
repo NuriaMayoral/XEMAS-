@@ -82,3 +82,28 @@ def download_shelters():
         geometry=gpd.points_from_xy(raw["geo_epgs_25831_x"], raw["geo_epgs_25831_y"]),
         crs=CRS,
     )
+
+
+def download_population_age(year=2024):
+    """Population aged 75 or more and aged 0-4 by census section (1 January of `year`).
+
+    Counts below the statistical secrecy threshold are published as '..' and are counted
+    as 0 here (about 0.1% of the population is lost).
+    """
+    path = _download("pad_mdbas_edat-q", f"{year}_pad_mdbas_edat-q.csv")
+    raw = pd.read_csv(path, dtype={"Valor": str})
+    raw["Valor"] = pd.to_numeric(raw["Valor"], errors="coerce").fillna(0)
+    old = raw[raw["EDAT_Q"] >= 15].groupby("Seccio_Censal")["Valor"].sum().rename("pop_75plus")
+    young = raw[raw["EDAT_Q"] == 0].groupby("Seccio_Censal")["Valor"].sum().rename("pop_0_4")
+    return pd.concat([old, young], axis=1).rename_axis("section_id").reset_index()
+
+
+def download_heat_vulnerability():
+    """Global vulnerability to heat by area (municipal study of the 2015 heat wave).
+
+    Polygons in EPSG:25831 with one column, `vuln_total` (integer score from 2 to 9). The
+    documentation of the file is minimal: higher values go with lower-income areas and with
+    the poorest hillside sections, so they are read as higher vulnerability.
+    """
+    path = _download("factor-de-vulnerabilitat", "2015_vulnera_global.gpkg")
+    return gpd.read_file(path).rename(columns={"VulnTot_On": "vuln_total"})
