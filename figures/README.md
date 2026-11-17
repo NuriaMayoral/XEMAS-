@@ -1,10 +1,10 @@
 # Figures
 
-All figures are saved in the `Gabri/` folder (PNG at 200 dpi and SVG). The code is in the notebooks `notebook/gabri_idea6.ipynb`, `notebook/gabri_idea4.ipynb` and `notebook/gabri_idea2.ipynb`.
+All figures are saved in the `Gabri/` folder (PNG at 200 dpi and SVG). The code is in the notebooks `notebook/gabri_idea6.ipynb`, `notebook/gabri_idea4.ipynb` and `notebook/gabri_idea2.ipynb`. The four paper figures `idea6_demand_vs_temperature`, `idea6_hydro_drought_replacement`, `idea4_olive_timeline` and `idea2_accessibility_by_income` are produced by `notebook/gabri_figures_v2.py` (same data and methods, redesigned layout; run from `notebook/`), which overwrites the notebook versions of the first, second and fourth.
 
 ## idea6_demand_vs_temperature (.png, .svg)
 
-Daily electricity demand in Catalonia against mean daily temperature, coloured by season, with a two-threshold piecewise linear fit.
+Daily electricity demand in Catalonia against mean daily temperature, with a two-threshold piecewise linear fit. The fit is split into base load (grey), extra demand for heating (blue) and for cooling (red), on an axis that starts at zero so the areas show the true size of each part.
 
 - **Data:** demand from the Catalan open data dataset `hx6q-ykhb` (daily total, MWh, converted to GWh); temperature from XEMA daily data (`7bvh-jvq2`, variable 1000) at station X4, Barcelona - el Raval. Code in `notebook/gabri_idea6.ipynb` and `notebook/xema.py`.
 - **Sample:** weekdays 2022-2025 (912 days), excluding Catalan public holidays, August (holiday effect) and 28 Apr 2025 (Iberian blackout, 69 GWh).
@@ -21,7 +21,7 @@ Daily electricity demand in Catalonia against mean daily temperature, coloured b
 
 ## idea6_hydro_drought_replacement (.png, .svg): main figure 2
 
-Top: Pyrenean rain (mean of 13 XEMA valley stations, 12-month total) and Catalan hydro generation (12-month total), 2019-2025, with the 2022-2024 drought period shaded (approximate). Bottom: change in annual generation by source, and in net imports, versus the previous year, for 2022-2025, all on the same GWh scale (hydro in blue, net imports in red).
+(a) Pyrenean rain (mean of 13 XEMA valley stations, 12-month total), Catalan hydro generation (12-month total) and the volume of the nine Conques Internes reservoirs, each as a percentage of its own 2019-2025 mean, with the 2022-2024 drought shaded (approximate). (b) Waterfall of the change in annual generation by source and in net imports from 2022 to 2023 (GWh); the steps add up to the change in total supply (-522 GWh). Hydro in blue, combined cycle in brown, net imports in red. The year-by-year changes for 2022-2025 are in Table 3 of the paper.
 
 - **Data:** generation by technology from REData (REE); rain from XEMA daily precipitation (variable 1300), valley stations below 1,800 m in the Pyrenean comarques; net imports = electricity exchange balance from the Catalan energy indicators dataset (`j7xc-3kfh`). Code in `notebook/gabri_idea6.ipynb` and `notebook/xema.py`.
 - **First reading:** hydro follows Pyrenean rain: both reach their minimum in 2023 and recover in 2024-2025 (annual hydro vs rain, r = 0.80, 7 years). The hypothesis "combined cycle replaces hydro in the drought" does not hold. 2022: hydro -704 GWh while combined cycle +3,097 (a gas-market and export episode, linked to the Iberian gas price cap) and net imports fall 1,285. 2023: hydro -458, combined cycle -2,014, nuclear -1,437, wind +623, and net imports rise 2,575: the gap is covered by imports. 2024: hydro +1,381 and combined cycle -1,042. 2025: small changes.
@@ -50,6 +50,10 @@ Top: monthly olive oil consumer price index (2021 = 100), 2002-2025. Below: rain
 - **Checks with known values:** olive oil +54.6% and general CPI +3.1% in December 2023 match the official figures. The index peaks at 265 in April 2024 (annual change peak: +73.5% in October 2023) and falls to about 139 at the end of 2025.
 - **Reading:** the driest hydrological years in Andalusia are 2005 (z = -1.90), 2012 (-1.03), 2019 (-0.98) and 2023 (-0.84). The December price change was +26.5%, +18.0%, -11.4% and +54.6%: three of the four driest years saw large price rises, 2019 did not. Other rises (2015 +26.5%, 2021 +26.7%, 2022 +35.2%) came with only mild deficits (z of -0.3 to -0.5), so other drivers matter. The wettest year (2010, z = +2.73) had a price change of -7.5%, and the fall of 2025 (-31.6%) came with a wet year.
 
+## idea4_olive_timeline (Gabri/, .png and .svg): paper figure 3
+
+(a) Monthly annual change of the olive oil CPI and of the general CPI, 2003-2025, with the hydrological years of the four driest years in Andalusia (2005, 2012, 2019, 2023) shaded and the +73.5% peak (October 2023) marked. (b, c) The same scatter as `idea4_rain_vs_price_scatter` for Andalusia and Catalonia, with the least-squares line, the Pearson and Spearman coefficients in the panel title, and the notable years labelled. Same data and results as the two figures below.
+
 ## idea4_rain_vs_price_scatter (Gabri/, .png and .svg)
 
 One point per year (2003-2025): rain anomaly of the hydrological year against the annual change of the olive oil CPI in December (the harvest runs from November to February), for Andalusia (left) and Catalonia (right). The shaded area marks drier-than-average years with rising prices.
@@ -75,7 +79,7 @@ Two maps by census section: disposable income per person (2023, left) and the gl
 
 ## idea2_accessibility_by_income (Gabri/, .png and .svg)
 
-Share of all residents and of residents aged 75 or more within 400 m (about 5 min) and 800 m (about 10 min), in a straight line, of the nearest climate shelter, by income decile (deciles weighted by population, about 10% of the population each; decile 1 = lowest income).
+Share of residents within 400 m (about 5 min, dark bars) and 800 m (about 10 min, light bars), in a straight line, of the nearest climate shelter, by income decile (deciles weighted by population, about 10% of the population each; decile 1 = lowest income), on a full 0-100% axis with the City Council's 99% claim as a dashed line. The values for residents aged 75+ are given below but no longer drawn.
 
 - **Method:** share of each section's area inside the 400 m and 800 m buffers of the shelters, times the section's population (uniform density inside a section; EPSG:25831). A second measure (distance from one point of each section) gives the same pattern.
 - **Result:** the whole city has 96.6% of residents within 400 m and 99.5% within 800 m, and 96.8% and 99.6% for residents aged 75+, consistent with the official claim of 99% within 10 minutes in a straight line. The poorest deciles are well served (decile 1: 97% within 400 m and 100% within 800 m). The richest decile has the lowest coverage: 88.3% within 400 m (87.5% for 75+) and 98.6% within 800 m (98.4% for 75+). Spearman correlation between income and distance to the nearest shelter: +0.07. The share of residents aged 75+ is 7.5% in decile 1 and 10.5-12.2% in the others. Our initial hypothesis (poorer areas have fewer shelters nearby) is not supported.
