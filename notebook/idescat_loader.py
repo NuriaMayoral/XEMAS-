@@ -122,7 +122,7 @@ _COMARCA_FIX = {
     "GIRONES": "Gironès", "SELVA": "La Selva", "LA SELVA": "La Selva",
     "PLA D 'URGELL": "Pla d'Urgell", "RIBERA D'EBRRE": "Ribera d'Ebre",
     "TERA ALTA": "Terra Alta", "CONCA DE BARBERA": "Conca de Barberà",
-    "ARAN": "Aran", "VALL D'ARAN": "Aran",
+    "ARAN": "Aran", "VALL D'ARAN": "Aran", "VAL D'ARAN": "Aran",
 }
 
 

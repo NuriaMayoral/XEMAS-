@@ -6,7 +6,7 @@ Steps (each one a function):
   comarca_monthly                      anomalies per station first, then averaged per comarca
   seasonal                             anomalies over a crop-specific window of months
   yield_anomaly                        detrended log-yield per comarca x crop
-  fit                                  pooled OLS per crop, errors clustered by comarca
+  fit                                  pooled OLS per crop, errors clustered by comarca and year
 Equations:  ln y_{c,t} = a_c + b_c t + e_{c,t}        (e = relative yield anomaly)
             e_{c,t}   = b_T dT_{c,t} + b_P dP_{c,t}/Pbar_c + u_{c,t}
 """
@@ -129,7 +129,7 @@ def yield_anomaly(h, crops=None, min_years=10, min_area=300):
 
 # ----------------------------------------------------------------------- fit
 def fit(ya, cm):
-    """Pooled OLS per crop with errors clustered by comarca. Returns a summary table + the data."""
+    """Pooled OLS per crop with errors clustered by comarca and year. Returns a summary table + the data."""
     import statsmodels.formula.api as smf
     rows, data = [], []
     for crop, win in CROP_WINDOW.items():
@@ -137,10 +137,15 @@ def fit(ya, cm):
         d = ya[ya["crop_h"] == crop].merge(s, on=["comarca", "year"])
         if len(d) < 30:
             continue
-        r = smf.ols("e ~ dT + dP_rel", d).fit(cov_type="cluster", cov_kwds={"groups": d["comarca"]})
+        # the same year hits every comarca: cluster by comarca AND year (otherwise p-values are far too small)
+        g = np.column_stack([pd.factorize(d["comarca"])[0], d["year"].to_numpy()])
+        r = smf.ols("e ~ dT + dP_rel", d).fit(cov_type="cluster", cov_kwds={"groups": g})
+        ci = r.conf_int()                      # 95 % interval
         rows.append({"crop": crop, "window": win, "n": int(r.nobs), "n_comarques": d["comarca"].nunique(),
                      "b_T_pct_per_C": 100 * r.params["dT"], "p_T": r.pvalues["dT"],
+                     "b_T_lo": 100 * ci.loc["dT", 0], "b_T_hi": 100 * ci.loc["dT", 1],
                      "b_P_pct_per_100pct": 100 * r.params["dP_rel"], "p_P": r.pvalues["dP_rel"],
+                     "b_P_lo": 100 * ci.loc["dP_rel", 0], "b_P_hi": 100 * ci.loc["dP_rel", 1],
                      "R2": r.rsquared})
         data.append(d.assign(crop_h=crop))
     return pd.DataFrame(rows), pd.concat(data, ignore_index=True)
