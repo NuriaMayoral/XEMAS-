@@ -72,7 +72,39 @@ def download_demand(start, end, page=50_000):
     return out
 
 
-REDATA_URL = "https://apidatos.ree.es/es/datos/generacion/estructura-generacion"
+def download_demand_hourly(start, end, page=50_000):
+    """Hourly electricity demand in Catalonia (MWh in each hour, columns h01-h25), cached.
+
+    Same dataset as download_demand; h25 is only non-zero on the day clocks go back.
+    """
+    RAW.mkdir(parents=True, exist_ok=True)
+    cache = RAW / f"demand_hourly_{start}_{end}.csv"
+    if cache.exists():
+        return pd.read_csv(cache, parse_dates=["date"])
+
+    hours = [f"h{i:02d}" for i in range(1, 26)]
+    where = f"data >= '{start}T00:00:00' AND data <= '{end}T23:59:59'"
+    chunks, offset = [], 0
+    while True:
+        params = {"$select": "data," + ",".join(hours), "$where": where,
+                  "$order": "data", "$limit": page, "$offset": offset}
+        resp = requests.get(DEMAND_URL, params=params, timeout=60)
+        resp.raise_for_status()
+        rows = resp.json()
+        chunks.append(pd.DataFrame(rows))
+        if len(rows) < page:
+            break
+        offset += page
+
+    raw = pd.concat(chunks, ignore_index=True)
+    out = pd.DataFrame({"date": pd.to_datetime(raw["data"])})
+    for h in hours:
+        out[h] = pd.to_numeric(raw[h])
+    out.to_csv(cache, index=False)
+    return out
+
+
+REDATA_URL ="https://apidatos.ree.es/es/datos/generacion/estructura-generacion"
 
 
 def download_generation(start_year, end_year):
