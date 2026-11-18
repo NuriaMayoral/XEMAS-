@@ -1,10 +1,9 @@
 """Paper figures, version 2 (Gabri). Run from notebook/: uv run --offline --project ../.. python gabri_figures_v2.py
 
-Rebuilds four figures with the same data and methods as gabri_idea6/4/2.ipynb (cached raw data).
+Rebuilds three figures (the demand-temperature figure is made in gabri_idea6.ipynb) with the same data and methods as gabri_idea6/4/2.ipynb (cached raw data).
 """
 from pathlib import Path
 
-import holidays
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -36,60 +35,6 @@ def note(fig, text):
     fig.text(0.01, 0.008, text, fontsize=6.5, ha="left", va="bottom", color="dimgrey")
 
 
-# ---------------------------------------------------------------- 1. demand vs temperature
-def hinge_fit(t, y, t_cold, t_hot):
-    X = np.column_stack([np.ones(len(t)), np.clip(t_cold - t, 0, None), np.clip(t - t_hot, 0, None)])
-    coef, *_ = np.linalg.lstsq(X, y, rcond=None)
-    return coef, ((y - X @ coef) ** 2).sum()
-
-
-def fig_demand():
-    t = xema.download_daily("X4", "1000", "2019-01-01", "2025-12-31").rename(columns={"value": "temp_c"})
-    d = xema.download_demand("2019-01-01", "2025-12-31")
-    df = d.merge(t, on="date", how="inner", validate="one_to_one")
-    cat = holidays.Spain(subdiv="CT", years=range(2022, 2026))
-    keep = ((df["date"] >= "2022-01-01") & (df["date"].dt.dayofweek < 5)
-            & ~df["date"].dt.date.isin(cat.keys()) & (df["date"].dt.month != 8)
-            & (df["date"] != "2025-04-28"))
-    fit = df.loc[keep].assign(demand_gwh=lambda x: x["demand_mwh"] / 1000)
-    assert len(fit) == 912, len(fit)  # known value from the paper
-    tt, y = fit["temp_c"].to_numpy(), fit["demand_gwh"].to_numpy()
-    best = min(((hinge_fit(tt, y, tc, th)[1], tc, th) for tc in np.arange(10, 20.5, 0.5)
-                for th in np.arange(tc, 24.5, 0.5)))
-    _, tc, th = best
-    (base, a_c, a_h), _ = hinge_fit(tt, y, tc, th)
-
-    g = np.linspace(tt.min(), tt.max(), 300)
-    cold, heat = a_c * np.clip(tc - g, 0, None), a_h * np.clip(g - th, 0, None)
-    fig, ax = plt.subplots(figsize=(8, 5))
-    ax.fill_between(g, 0, base, color=C["base"], lw=0, label=f"base load ({base:.0f} GWh/day)")
-    ax.fill_between(g, base, base + cold, color=C["cold"], alpha=0.55, lw=0, label="extra for heating")
-    ax.fill_between(g, base, base + heat, color=C["heat"], alpha=0.55, lw=0, label="extra for cooling")
-    ax.scatter(tt, y, s=7, color="black", alpha=0.35, lw=0, label="one weekday (n = 912)")
-    ax.plot(g, base + cold + heat, color="black", lw=1.6)
-    ax.axvline(tc, color="dimgrey", lw=0.8, ls=":")
-    ax.axvline(th, color="dimgrey", lw=0.8, ls=":")
-    box = dict(facecolor="white", alpha=0.85, edgecolor="none", pad=2)
-    ax.annotate(f"+{a_c:.1f} GWh per °C\nbelow {tc:.0f} °C", xy=(8, base + a_c * (tc - 8)),
-                xytext=(5.5, 60), color=C["cold"], fontweight="bold", bbox=box,
-                arrowprops=dict(arrowstyle="->", color=C["cold"]))
-    ax.annotate(f"+{a_h:.1f} GWh per °C\nabove {th:.0f} °C", xy=(29, base + a_h * (29 - th)),
-                xytext=(26.5, 60), color=C["heat"], fontweight="bold", bbox=box, ha="center",
-                arrowprops=dict(arrowstyle="->", color=C["heat"]))
-    ax.text((tc + th) / 2, 30, "comfort\nzone", ha="center", fontsize=8, color="dimgrey")
-    ax.set_ylim(0, 170)
-    ax.set_xlabel("Mean daily temperature at Barcelona-Raval (°C)")
-    ax.set_ylabel("Daily electricity demand in Catalonia (GWh)")
-    ax.set_title("Each degree of heat costs more electricity than each degree of cold")
-    ax.legend(loc="upper center", ncol=4, fontsize=7.5, bbox_to_anchor=(0.5, 1.0))
-    note(fig, "Weekdays 2022-2025 without holidays, August and 28 Apr 2025. Two-threshold least-squares "
-              "fit, thresholds on a 0.5 °C grid. Sources: Catalan open data, XEMA (X4).")
-    fig.tight_layout(rect=(0, 0.03, 1, 1))
-    save(fig, "idea6_demand_vs_temperature")
-    print("demand:", len(fit), tc, th, round(a_c, 2), round(a_h, 2), round(base, 1))
-
-
-# ---------------------------------------------------------------- 2. drought and replacement
 def fig_drought():
     gen = xema.download_generation(2019, 2025)
     gen_p = gen.pivot(index="date", columns="technology", values="value_mwh") / 1000
@@ -294,7 +239,6 @@ def fig_shelters():
 
 
 if __name__ == "__main__":
-    fig_demand()
     fig_drought()
     fig_olive()
     fig_shelters()

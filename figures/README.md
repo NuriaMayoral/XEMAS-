@@ -1,14 +1,14 @@
 # Figures
 
-All figures are saved in the `Gabri/` folder (PNG at 200 dpi and SVG). The code is in the notebooks `notebook/gabri_idea6.ipynb`, `notebook/gabri_idea4.ipynb` and `notebook/gabri_idea2.ipynb`. The four paper figures `idea6_demand_vs_temperature`, `idea6_hydro_drought_replacement`, `idea4_olive_timeline` and `idea2_accessibility_by_income` are produced by `notebook/gabri_figures_v2.py` (same data and methods, redesigned layout; run from `notebook/`), which overwrites the notebook versions of the first, second and fourth.
+All figures are saved in the `Gabri/` folder (PNG at 200 dpi and SVG). The code is in the notebooks `notebook/gabri_idea6.ipynb`, `notebook/gabri_idea4.ipynb` and `notebook/gabri_idea2.ipynb`. The paper figures `idea6_hydro_drought_replacement`, `idea4_olive_timeline` and `idea2_accessibility_by_income` are produced by `notebook/gabri_figures_v2.py` (same data and methods, redesigned layout; run from `notebook/`), which overwrites the notebook versions of the first and third. All `idea6_demand_*` figures come from `notebook/gabri_idea6.ipynb`. Colours of the demand figures are colour-blind safe (Okabe-Ito, coolwarm, cividis).
 
 ## idea6_demand_vs_temperature (.png, .svg)
 
-Daily electricity demand in Catalonia against mean daily temperature, with a two-threshold piecewise linear fit. The fit is split into base load (grey), extra demand for heating (blue) and for cooling (red), on an axis that starts at zero so the areas show the true size of each part.
+Daily electricity demand in Catalonia against mean daily temperature, with a two-threshold piecewise linear fit, coloured (and marked) by season. Demand is shown as % above a mild day: 0% = 114 GWh, the fitted base load in the comfort zone.
 
 - **Data:** demand from the Catalan open data dataset `hx6q-ykhb` (daily total, MWh, converted to GWh); temperature from XEMA daily data (`7bvh-jvq2`, variable 1000) at station X4, Barcelona - el Raval. Code in `notebook/gabri_idea6.ipynb` and `notebook/xema.py`.
 - **Sample:** weekdays 2022-2025 (912 days), excluding Catalan public holidays, August (holiday effect) and 28 Apr 2025 (Iberian blackout, 69 GWh).
-- **First reading:** comfort zone between 17 and 22 °C (about 114 GWh/day). Demand rises about 2.9 GWh per °C below 17 °C and about 4.2 GWh per °C above 22 °C, so heat weighs more than cold. At the same temperature winter days consume more than spring days, so temperature explains only part of the variation (residual RMSE about 5.8 GWh).
+- **First reading:** comfort zone between 17 and 22 °C (about 114 GWh/day). Demand rises about 2.9 GWh (2.5%) per °C below 17 °C and about 4.2 GWh (3.7%) per °C above 22 °C, so heat weighs more than cold. At the same temperature winter days consume more than spring days, so temperature explains only part of the variation (residual RMSE about 5.8 GWh).
 - **Choice of station:** Raval is urban (33 m), which suits a demand that is mostly urban. The Fabra observatory (D5, Collserola, 410 m) is a forest site about 2 °C cooler on average than Raval, so using it shifts thresholds and slopes. Same 912 days, same method, slopes in GWh per °C:
 
   | Station | Area | Location | Altitude | Thresholds (cold / heat) | Slope cold | Slope heat | RMSE (GWh) |
@@ -34,6 +34,22 @@ Does hydro generation rise before the rain (anticipation) or after it (arrival o
 
 - **Result:** the correlation peaks when rain leads hydro by 1 month (0.49) and 2 months (0.42), and is low when hydro leads rain (0.10 at one month, 0.14 at two). The k = -3 bar (0.30) most likely reflects wet and dry spells that persist for months, not anticipation. Hydro depends mostly on rain accumulated over the previous 6-12 months (r = 0.72 and 0.68), not on the current month.
 - **Limits:** 84 months with strong autocorrelation, so a threshold of about 0.21 for significance is optimistic; rain is a mean over valley stations; at monthly resolution anticipation cannot be fully ruled out.
+
+## idea6_demand_vs_date (.png, .svg)
+
+The same 912 days against the day of the year, coloured by temperature (coolwarm, centred on the comfort zone), with a seasonal curve that uses only the calendar (mean plus two annual harmonics, least squares).
+
+- **Data and sample:** as `idea6_demand_vs_temperature`. Code in `notebook/gabri_idea6.ipynb`.
+- **First reading:** on the same date, hotter or colder days use more electricity than the seasonal curve predicts. The calendar explains R² = 0.52 of the daily variation; the temperature fit explains 0.67, with fewer free parameters (3 coefficients plus 2 thresholds, against 5 coefficients). So temperature, not the date itself, drives most of the seasonal pattern.
+- **Limits:** in-sample R², no cross-validation; the low points in early January and late December are the Christmas weeks, which neither model captures.
+
+## idea6_demand_by_hour (.png, .svg)
+
+(a) Mean hourly demand profile on cold (< 12 °C), mild (17-22 °C) and hot (> 25 °C) days. (b) Demand at each hour and 2 °C temperature bin, as % above mild days at the same hour.
+
+- **Data:** hourly columns `h01`-`h24` of `hx6q-ykhb` (MWh in each hour; `notebook/xema.py`, `download_demand_hourly`), taken as hours 0-23. The 24 hours add up exactly to the daily totals used above. Temperature is the daily mean at X4. Same 912 weekdays (no clock-change day falls among them); bins with fewer than 5 days hidden.
+- **First reading:** heat adds most in the afternoon (up to about +35-40% around 13-17 h on days above 28 °C) and also keeps nights high; cold adds most in the morning (8-10 h) and evening peak (19-21 h).
+- **Limits:** daily mean temperature, not hourly; the hour convention of `h01` (00-01 h) is assumed and should be checked in the dataset documentation. Next step: hourly temperature from XEMA.
 
 ## idea6_hydro_vs_reservoirs (.png, .svg): supporting figure
 
