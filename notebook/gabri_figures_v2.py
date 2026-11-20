@@ -1,6 +1,6 @@
 """Paper figures, version 2 (Gabri). Run from notebook/: uv run --offline --project ../.. python gabri_figures_v2.py
 
-Rebuilds three figures (the demand-temperature figure is made in gabri_idea6.ipynb) with the same data and methods as gabri_idea6/4/2.ipynb (cached raw data).
+Rebuilds three figures (the demand-temperature figure is made in gabri_heat_energy_demand.ipynb) with the same data and methods as gabri_heat_energy_demand, gabri_drought_hydro_energy and gabri_drought_olive_oil (cached raw data).
 """
 from pathlib import Path
 
@@ -114,7 +114,7 @@ def fig_drought():
               "ACA reservoirs (nine Conques Internes reservoirs); Catalan energy indicators (net imports = "
               "exchange balance).")
     fig.subplots_adjust(left=0.09, right=0.98, top=0.95, bottom=0.08)
-    save(fig, "idea6_hydro_drought_replacement")
+    save(fig, "hydro_drought_replacement")
 
 
 # ---------------------------------------------------------------- 3. olive oil
@@ -185,7 +185,7 @@ def fig_olive():
     note(fig, "Shaded bands: hydrological years (Oct-Sep) of the four driest years in Andalusia, 2003-2025. Each "
               "point is one year (n = 23). Sources: INE CPI (table 50905); Open-Meteo reanalysis; XEMA.")
     fig.subplots_adjust(left=0.08, right=0.98, top=0.95, bottom=0.1)
-    save(fig, "idea4_olive_timeline")
+    save(fig, "olive_oil_timeline")
 
 
 # ---------------------------------------------------------------- 4. shelters
