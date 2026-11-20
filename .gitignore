@@ -224,3 +224,6 @@ data/processed/
 # macOS and R files
 .DS_Store
 .Rhistory
+
+# Visual Studio
+.vscode

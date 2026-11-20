@@ -21,10 +21,6 @@ plantation.
 
 In the data treatment part, every header that is not recognised is printed, never dropped 
 silently.
-
-Functions:
-_norm(s)
-
 """
 import os
 import re
