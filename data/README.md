@@ -23,5 +23,4 @@ Notes:
 
 ### Open data portals
 
-- [data.europa.eu](https://data.europa.eu/en) · [datos.gob.es](https://datos.gob.es/es/) · [INE](https://www.ine.es/) · [Eurostat](https://ec.europa.eu/eurostat)
-- [Transparència Catalunya](https://analisi.transparenciacatalunya.cat/) · [Dades Obertes DIBA](https://dadesobertes.diba.cat/) · [Open Data BCN](https://opendata-ajuntament.barcelona.cat/es)
+- [Transparència Catalunya](https://analisi.transparenciacatalunya.cat/) · [ICGC](https://www.icgc.cat/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-cartografica/Divisions-administratives)
