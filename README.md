@@ -37,7 +37,7 @@ Notes:
 - ## How to run
 
 ```console
-git clone https://github.com/<org>/<repo>.git
+git clone https://github.com/NuriaMayoral/XEMAS-.git
 cd <repo>
 uv sync            # or: conda env create -f environment.yml
 uv run jupyter lab
