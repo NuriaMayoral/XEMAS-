@@ -17,7 +17,6 @@ Notes:
 
 - Numbers in the CSVs use a comma as decimal separator (and a dot for thousands in some columns), so read them with `decimal=","` and `thousands="."`.
 - The municipality code in the fires CSV has no leading zero (e.g. `80018`); pad it to 6 digits before joining with the maps.
-- Attribution: fire, drought, reservoir and groundwater data: Generalitat de Catalunya, via Transparència Catalunya (Llicència oberta d'ús d'informació - Catalunya). Boundaries: Institut Cartogràfic i Geològic de Catalunya (ICGC).
 
 ## Repositories of open datasets
 
