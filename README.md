@@ -2,7 +2,7 @@
 
 *One sentence: the question your project answers.*
 
-**Team:** Name Surname (@github-user) · Name Surname (@github-user) · …
+**Team:** Gabriel Vicente Albasini Surname (@gabrielvalbasini-lab) · Núria Mayoral (@NuriaMayoral) · Jesús Ruiz (@jesusruango-dev) · Hug Sala (@hugsalaoriol)
 
 ## Question
 
@@ -53,7 +53,8 @@ Run the notebooks in order (*Kernel → Restart & Run All*):
 
 | Figure | File | Message |
 |---|---|---|
-| fires_map_municipalities | `figures/fires_map_municipalities.png` | Map with the forest hectares burned in Catalonia for every minicipality for 2011-2024|
+| fires_map_municipalities | `figures/fires_map_municipalities.png` | Map with the forest hectares burned in Catalonia for every municipality for 2011-2024. |
+| fires_map_regions | `figures/fires_map_regions.png` | Map with the forest hectares burned in Catalonia for every comarca for 2011-2024. |
 
 ## Use of AI tools
 
