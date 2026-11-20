@@ -51,9 +51,9 @@ Run the notebooks in order (*Kernel → Restart & Run All*):
 
 ## Figures
 
-| Figure | File | Message (one sentence) |
+| Figure | File | Message |
 |---|---|---|
-| 1 | `plots/fig1.pdf` | |
+| fires_map_municipalities | `figures/fires_map_municipalities.png` | Map with the forest hectares burned in Catalonia for every minicipality for 2011-2024|
 
 ## Use of AI tools
 
