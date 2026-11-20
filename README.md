@@ -42,13 +42,6 @@ cd <XEMAS->
 uv sync            # or: conda env create -f environment.yml
 uv run jupyter lab
 ```
-
-Run the notebooks in order (*Kernel → Restart & Run All*):
-
-1. `notebooks/01_load_data.ipynb` — download and cache the data
-2. `notebooks/02_clean.ipynb` — cleaning and joins
-3. `notebooks/03_figures.ipynb` — the figures of the article (saved to `plots/`)
-
 ## Figures
 
 | Figure | File | Message |
