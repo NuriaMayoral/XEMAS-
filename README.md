@@ -57,4 +57,5 @@ uv run jupyter lab
 
 ## Licence
 
-Code: see `LICENSE`. Data: see the licences in the table above.
+Code: see `LICENSE`. 
+Data: see the licences in the table above.
