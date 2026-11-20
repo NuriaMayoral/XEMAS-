@@ -1,14 +1,13 @@
 """Figures for the crop-climate results (matplotlib, light theme).
 fig_time(data, crop)      rain anomaly and yield anomaly by year, two stacked panels
 fig_scatter(data, crop)   yield anomaly vs rain anomaly, comarca x year, drought years highlighted
-fig_forest(tab)           coefficients with 95 % intervals for every crop
 `data` and `tab` are the two objects returned by climate_yield.fit(ya, cm).
 Every function shows its figure itself (once), saves nothing to disk, and returns None.
 """
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
-import statsmodels.formula.api as smf
+import statsmodels.formula.api as smf # type: ignore
 
 INK, INK2, GRID, SURF = "#0b0b0b", "#52514e", "#e4e3df", "#fcfcfb"
 BLUE, ORANGE, AQUA, GREY = "#2a78d6", "#eb6834", "#1baf7a", "#a8a7a2"   # categorical slots 1, 2, 3 + neutral gray
@@ -33,7 +32,7 @@ _MES = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"
 
 def _win(crop):
     """('Oct–Jun', window name) for a crop, from climate_yield.CROP_WINDOW."""
-    import climate_yield as C
+    import hug_climate_yield as C
     w = C.CROP_WINDOW.get(crop, "cereal")
     m0, m1, _ = C.WINDOWS[w]
     return f"{_MES[m0]}–{_MES[m1]}", w
@@ -130,7 +129,7 @@ def load_comarques(path, fix_comarca, name_col=None, known=None):
 def fig_maps(geo, data, cm, years=(2015, 2020, 2023), crop="Blat", window=None):
     """Top row: rain anomaly, bottom row: yield anomaly. One column per year, one shared colour
     scale per row (so the years can be compared). Hatched = no data for that comarca/year."""
-    import climate_yield as C
+    import hug_climate_yield as C
     from matplotlib.colors import LinearSegmentedColormap, TwoSlopeNorm
     from matplotlib.cm import ScalarMappable
     window = window or _win(crop)[1]                      # month window that belongs to the crop

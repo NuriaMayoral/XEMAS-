@@ -1,15 +1,9 @@
-"""XEMA weather -> comarca climate anomalies -> crop-yield anomalies -> regression.
-
-Steps (each one a function):
-  download_daily / download_stations   Socrata API, paged by year
-  monthly_station                      station x variable x month (needs >= MIN_DAYS valid days)
-  comarca_monthly                      anomalies per station first, then averaged per comarca
-  seasonal                             anomalies over a crop-specific window of months
-  yield_anomaly                        detrended log-yield per comarca x crop
-  fit                                  pooled OLS per crop, errors clustered by comarca and year
-Equations:  ln y_{c,t} = a_c + b_c t + e_{c,t}        (e = relative yield anomaly)
-            e_{c,t}   = b_T dT_{c,t} + b_P dP_{c,t}/Pbar_c + u_{c,t}
+"""This file is used as a function repository for the main jupiter notebook
+The goal is to be able to load all data from XEMA database (see URL_DAILY and
+URL_STATIONS). Because all colaborators will use this databases, the functions 
+to download the data may be reused by them.
 """
+
 import numpy as np
 import pandas as pd
 import requests
@@ -19,16 +13,17 @@ URL_STATIONS = "https://analisi.transparenciacatalunya.cat/resource/yqwd-vj5e.js
 MIN_DAYS = 25          # valid days needed to accept a station-month
 PAGE = 50000
 
-# crop -> (window name); window = (first month, last month, starts in previous year?)
-WINDOWS = {"cereal": (10, 6, True),     # sowing in autumn -> harvest in June
+# We characterize the season of growth on each type of crop:
+WINDOWS = {"cereal": (10, 6, True),     # sowing in autumn and harvest in June
            "growing": (4, 9, False),    # maize, vine
-           "tree": (2, 9, False)}       # almond, olive: flowering -> fruit filling
+           "tree": (2, 9, False)}       # almond, olive: flowering and fruit filling
 CROP_WINDOW = {"Blat": "cereal", "Ordi": "cereal", "Blat de moro": "growing",
-               "Ametller": "tree", "Olivera": "tree", "Vinya de raïm per a vi": "growing"}
+               "Ametller": "tree", "Olivera": "tree", "Vinya de raïm per a vi": "growing"} # classify in the groups of seasons 
 
 
-# ------------------------------------------------------------------ download
 def _get(url, params):
+    """This function accesses the API and requests the data asked through a SQL command, row 
+    limit and offset in the parameters through dictionary params"""
     out, offset = [], 0
     while True:
         p = dict(params, **{"$limit": PAGE, "$offset": offset})
@@ -36,13 +31,13 @@ def _get(url, params):
         r.raise_for_status()
         rows = r.json()
         out += rows
-        if len(rows) < PAGE:
+        if len(rows) < PAGE: #row limit
             return out
         offset += PAGE
 
 
 def download_daily(y0=2008, y1=2025):
-    """Daily mean temperature (1000) and precipitation (1300), one request series per year."""
+    """This function downloads Daily mean temperature (1000) and precipitation (1300), one request series per year."""
     frames = []
     for y in range(y0, y1 + 1):
         rows = _get(URL_DAILY, {
@@ -130,7 +125,7 @@ def yield_anomaly(h, crops=None, min_years=10, min_area=300):
 # ----------------------------------------------------------------------- fit
 def fit(ya, cm):
     """Pooled OLS per crop with errors clustered by comarca and year. Returns a summary table + the data."""
-    import statsmodels.formula.api as smf
+    import statsmodels.formula.api as smf # type: ignore
     rows, data = [], []
     for crop, win in CROP_WINDOW.items():
         s = seasonal(cm, win)
