@@ -132,7 +132,7 @@ def yield_anomaly(h, crops=None, min_years=10, min_area=300):
     return pd.concat(out, ignore_index=True)
 
 
-def fit(ya, cm):
+def fit(ya, cm, verbose = True):
     """This function uses the previous to compute d anomalies, to compute how a crop is influenced by rain and temperature anomalies. 
     Pooled OLS per crop with errors clustered by comarca and year. Returns a summary table + the data."""
     import statsmodels.formula.api as smf # type: ignore
@@ -151,5 +151,11 @@ def fit(ya, cm):
                      "b_P_pct_per_100pct": 100 * r.params["dP_rel"], "p_P": r.pvalues["dP_rel"],
                      "b_P_lo": 100 * ci.loc["dP_rel", 0], "b_P_hi": 100 * ci.loc["dP_rel", 1],
                      "R2": r.rsquared}) # parameters of the regression
+        if verbose: # To retrieve the data
+            t = rows[-1]
+            print(f"{crop:<24} window {win:<8} n = {t['n']}  ({t['n_comarques']} comarques)\n"
+                  f"  b_T = {t['b_T_pct_per_C']:+6.1f} % per degC       [{t['b_T_lo']:+.1f}, {t['b_T_hi']:+.1f}]  p = {t['p_T']:.3f}\n"
+                  f"  b_P = {t['b_P_pct_per_100pct']:+6.1f} % per +100 % rain  [{t['b_P_lo']:+.1f}, {t['b_P_hi']:+.1f}]  p = {t['p_P']:.3f}\n"
+                  f"  R2  = {t['R2']:.2f}")
         data.append(d.assign(crop_h=crop))
     return pd.DataFrame(rows), pd.concat(data, ignore_index=True)
