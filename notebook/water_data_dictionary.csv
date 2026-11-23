@@ -1,0 +1,11 @@
+file,column,meaning
+water_monthly.csv,spi6,SPI-6 rainfall index of the catchment (<= -1 = dry)
+water_monthly.csv,res,"Ter-Llobregat reservoirs, % of capacity (monthly mean)"
+water_monthly.csv,hyd,"Official hydrological status: 0 normal, 1 pre-alert, 2 alert, 3 exceptionality, 4 pre-emergency, 5+ emergency (NaN before 2021)"
+water_monthly.csv,plu,"Official rainfall status: 0 normal, 1 moderate, 2 severe, 3 extreme (NaN before 2021)"
+water_municipal_monthly.csv,municipi_code,"6-digit Idescat code with leading zero (join key, e.g. 081022)"
+water_municipal_monthly.csv,hyd / plu,"Same scales as above, per municipality and unit. NaN = no official data (not 'normal')"
+water_comarca_monthly.csv,comarca_code,Idescat comarca code (join key)
+water_comarca_monthly.csv,spi6 / n_stations,SPI-6 of the comarca and number of stations behind it (use n_stations >= 2 for robust values)
+water_comarca_monthly.csv,"hyd_max, share_hyd_alert, plu_max, share_plu_severe",Official status aggregated per comarca (only if the ICGC municipalities file was found)
+water_comarca_monthly.csv,"res_ter_llobregat_pct, in_ter_llobregat_catchment",System-level reservoir % (same for every comarca) and flag for the comarques feeding the system
