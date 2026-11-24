@@ -28,9 +28,8 @@ DROUGHT = (pd.Timestamp("2022-01-01"), pd.Timestamp("2024-12-31"))
 
 
 def save(fig, name):
-    """Save the figure as PNG (200 dpi) and SVG in figures/Gabri/ and close it."""
+    """Save the figure as PNG (200 dpi) in figures/Gabri/ and close it."""
     fig.savefig(OUT / f"{name}.png", dpi=200)
-    fig.savefig(OUT / f"{name}.svg")
     plt.close(fig)
 
 
