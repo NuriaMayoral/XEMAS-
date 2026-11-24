@@ -1,8 +1,10 @@
 # Figures
 
-All figures are saved in the `Gabri/` folder (PNG at 200 dpi and SVG). The code is in the notebooks `notebook/gabri_heat_energy_demand.ipynb`, `notebook/gabri_drought_hydro_energy.ipynb` and `notebook/gabri_drought_olive_oil.ipynb`. The paper figures `hydro_drought_replacement`, `olive_oil_timeline` and `idea2_accessibility_by_income` are produced by `notebook/gabri_figures_v2.py` (same data and methods, redesigned layout; run from `notebook/`), which overwrites the notebook versions of the first and third. All `energy_demand_*` figures come from `notebook/gabri_idea6.ipynb`. Colours of the demand figures are colour-blind safe (Okabe-Ito, coolwarm, cividis).
+This file describes Gabri's figures. Other figures: `fires_map_*.png` (Jesús), `Hug/` and `nuria/`, documented in their notebooks and in the main `README.md`.
 
-## energy_demand_vs_temperature (.png, .svg)
+All of Gabri's figures are saved in the `Gabri/` folder (PNG at 200 dpi and SVG). The `energy_demand_*` figures come from `notebook/gabri_heat_energy_demand.ipynb`, the `hydro_*` figures from `notebook/gabri_drought_hydro_energy.ipynb` and the `olive_oil_*` figures from `notebook/gabri_drought_olive_oil.ipynb`. The two main figures `hydro_drought_replacement` and `olive_oil_timeline` are drawn by `notebook/gabri_figures_v2.py`, which the last cell of the hydro and olive oil notebooks calls (it can also be run alone from `notebook/`). Colours of the demand figures are colour-blind safe (Okabe-Ito, coolwarm, cividis).
+
+## energy_demand_vs_temperature (.png, .svg): main figure
 
 Daily electricity demand in Catalonia against mean daily temperature, with a two-threshold piecewise linear fit, coloured (and marked) by season. Demand is shown as % above a mild day: 0% = 114 GWh, the fitted base load in the comfort zone.
 
@@ -19,13 +21,13 @@ Daily electricity demand in Catalonia against mean daily temperature, with a two
 
   The two urban stations fit slightly better than Fabra. Other limits: one station for all of Catalonia, four years of data, no weekday or season correction, and the demand dataset covers the main distributor's network only.
 
-## hydro_drought_replacement (.png, .svg): main figure 2
+## hydro_drought_replacement (.png, .svg): main figure
 
-(a) Pyrenean rain (mean of 13 XEMA valley stations, 12-month total), Catalan hydro generation (12-month total) and the volume of the nine Conques Internes reservoirs, each as a percentage of its own 2019-2025 mean, with the 2022-2024 drought shaded (approximate). (b) Waterfall of the change in annual generation by source and in net imports from 2022 to 2023 (GWh); the steps add up to the change in total supply (-522 GWh). Hydro in blue, combined cycle in brown, net imports in red. The year-by-year changes for 2022-2025 are in Table 3 of the paper.
+(a) Pyrenean rain (mean of 13 XEMA valley stations, 12-month total), Catalan hydro generation (12-month total) and the volume of the nine Conques Internes reservoirs, each as a percentage of its own 2019-2025 mean, with the 2022-2024 drought shaded (approximate). (b) Waterfall of the change in annual generation by source and in net imports from 2022 to 2023 (GWh); the steps add up to the change in total supply (-522 GWh). Hydro in blue, combined cycle in brown, net imports in red. The year-by-year changes for 2022-2025 are printed in section 3 of `notebook/gabri_drought_hydro_energy.ipynb`.
 
-- **Data:** generation by technology from REData (REE); rain from XEMA daily precipitation (variable 1300), valley stations below 1,800 m in the Pyrenean comarques; net imports = electricity exchange balance from the Catalan energy indicators dataset (`j7xc-3kfh`). Code in `notebook/gabri_drought_hydro_energy.ipynb` and `notebook/xema.py`.
+- **Data:** generation by technology from REData (REE); rain from XEMA daily precipitation (variable 1300), valley stations below 1,800 m in the Pyrenean comarques; net imports = electricity exchange balance from the Catalan energy indicators dataset (`j7xc-3kfh`). Code in `notebook/gabri_drought_hydro_energy.ipynb`, `notebook/gabri_figures_v2.py` and `notebook/xema.py`.
 - **First reading:** hydro follows Pyrenean rain: both reach their minimum in 2023 and recover in 2024-2025 (annual hydro vs rain, r = 0.80, 7 years). The hypothesis "combined cycle replaces hydro in the drought" does not hold. 2022: hydro -704 GWh while combined cycle +3,097 (a gas-market and export episode, linked to the Iberian gas price cap) and net imports fall 1,285. 2023: hydro -458, combined cycle -2,014, nuclear -1,437, wind +623, and net imports rise 2,575: the gap is covered by imports. 2024: hydro +1,381 and combined cycle -1,042. 2025: small changes.
-- **Context:** hydro is about 6% of Catalan generation in 2023, and nuclear about 60%, so its swings (for example longer refuelling outages at Asco in 2023, from press reports, not checked against official data) are as large as the hydro loss. Imports reach about 14% of demand in 2023 (press). Net imports in the dataset: 1,387 GWh (2019), 3,098 (2022), 5,672 (2023), 5,896 (2024), 6,227 (2025), consistent with demand minus local generation. Local generation falls from 45,112 GWh (2019) to 38,293 (2025) with flat demand, mostly combined cycle and cogeneration.
+- **Context:** hydro is about 6% of Catalan generation in 2023, and nuclear about 60%, so its swings (for example longer refuelling outages at Asco in 2023, from press reports, not checked against official data) are as large as the hydro loss. Net imports are 13.1% of demand in 2023 in the indicators dataset (5,672 of 43,281 GWh). Net imports in the dataset: 1,387 GWh (2019), 3,098 (2022), 5,672 (2023), 5,896 (2024), 6,227 (2025), consistent with demand minus local generation. Local generation falls from 45,112 GWh (2019) to 38,293 (2025) with flat demand, mostly combined cycle and cogeneration.
 - **Limits:** correlation, not causation. Rain is a proxy: it ignores snow, altitude and reservoir management. Sources differ in definitions (REData generation and the indicators dataset), so changes do not add up exactly. The REData solar series may not include small rooftop installations (not checked).
 
 ## hydro_vs_rain (.png, .svg): supporting figure
@@ -66,9 +68,9 @@ Top: monthly olive oil consumer price index (2021 = 100), 2002-2025. Below: rain
 - **Checks with known values:** olive oil +54.6% and general CPI +3.1% in December 2023 match the official figures. The index peaks at 265 in April 2024 (annual change peak: +73.5% in October 2023) and falls to about 139 at the end of 2025.
 - **Reading:** the driest hydrological years in Andalusia are 2005 (z = -1.90), 2012 (-1.03), 2019 (-0.98) and 2023 (-0.84). The December price change was +26.5%, +18.0%, -11.4% and +54.6%: three of the four driest years saw large price rises, 2019 did not. Other rises (2015 +26.5%, 2021 +26.7%, 2022 +35.2%) came with only mild deficits (z of -0.3 to -0.5), so other drivers matter. The wettest year (2010, z = +2.73) had a price change of -7.5%, and the fall of 2025 (-31.6%) came with a wet year.
 
-## olive_oil_timeline (Gabri/, .png and .svg): paper figure 3
+## olive_oil_timeline (Gabri/, .png and .svg): main figure
 
-(a) Monthly annual change of the olive oil CPI and of the general CPI, 2003-2025, with the hydrological years of the four driest years in Andalusia (2005, 2012, 2019, 2023) shaded and the +73.5% peak (October 2023) marked. (b, c) The same scatter as `olive_oil_rain_vs_price_scatter` for Andalusia and Catalonia, with the least-squares line, the Pearson and Spearman coefficients in the panel title, and the notable years labelled. Same data and results as the two figures below.
+(a) Monthly annual change of the olive oil CPI and of the general CPI, 2003-2025, with the hydrological years of the four driest years in Andalusia (2005, 2012, 2019, 2023) shaded and the +73.5% peak (October 2023) marked. (b, c) The same scatter as `olive_oil_rain_vs_price_scatter` for Andalusia and Catalonia, with the least-squares line, the Pearson and Spearman coefficients in the panel title, and the notable years labelled. Same data and results as the two figures below. Code in `notebook/gabri_figures_v2.py` (`fig_olive`), called from `notebook/gabri_drought_olive_oil.ipynb`.
 
 ## olive_oil_rain_vs_price_scatter (Gabri/, .png and .svg)
 
