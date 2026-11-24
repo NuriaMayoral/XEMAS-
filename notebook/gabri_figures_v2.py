@@ -1,6 +1,9 @@
-"""Paper figures, version 2 (Gabri). Run from notebook/: uv run --offline --project ../.. python gabri_figures_v2.py
+"""Main figures of Gabri's part: hydro_drought_replacement and olive_oil_timeline.
 
-Rebuilds three figures (the demand-temperature figure is made in gabri_heat_energy_demand.ipynb) with the same data and methods as gabri_heat_energy_demand, gabri_drought_hydro_energy and gabri_drought_olive_oil (cached raw data).
+Run from notebook/:  python gabri_figures_v2.py
+The same functions are called at the end of gabri_drought_hydro_energy.ipynb and
+gabri_drought_olive_oil.ipynb, with the same data and methods (raw data cached in
+data/raw/ by xema.py). The demand-temperature figure is made in gabri_heat_energy_demand.ipynb.
 """
 from pathlib import Path
 
@@ -9,7 +12,6 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-import opendata_bcn as bcn
 import xema
 
 OUT = Path("..") / "figures" / "Gabri"
@@ -26,16 +28,20 @@ DROUGHT = (pd.Timestamp("2022-01-01"), pd.Timestamp("2024-12-31"))
 
 
 def save(fig, name):
+    """Save the figure as PNG (200 dpi) and SVG in figures/Gabri/ and close it."""
     fig.savefig(OUT / f"{name}.png", dpi=200)
     fig.savefig(OUT / f"{name}.svg")
     plt.close(fig)
 
 
 def note(fig, text):
+    """Small grey source note at the bottom left of the figure."""
     fig.text(0.01, 0.008, text, fontsize=6.5, ha="left", va="bottom", color="dimgrey")
 
 
+# ---------------------------------------------------------------- 1. drought and hydro
 def fig_drought():
+    """Rain, hydro and reservoirs 2019-2025 (a) and the 2023 vs 2022 change by source (b)."""
     gen = xema.download_generation(2019, 2025)
     gen_p = gen.pivot(index="date", columns="technology", values="value_mwh") / 1000
     res = xema.download_reservoirs("2019-01-01", "2025-12-31")
@@ -117,8 +123,9 @@ def fig_drought():
     save(fig, "hydro_drought_replacement")
 
 
-# ---------------------------------------------------------------- 3. olive oil
+# ---------------------------------------------------------------- 2. olive oil
 def fig_olive():
+    """Olive oil price change with the driest Andalusian years (a) and rain vs price (b, c)."""
     cpi = xema.download_cpi().set_index("date")
     stations = ["VK", "VH", "WK", "UM", "D1", "WJ", "U7", "DB", "VQ", "DK"]
     cat = {}
@@ -188,57 +195,6 @@ def fig_olive():
     save(fig, "olive_oil_timeline")
 
 
-# ---------------------------------------------------------------- 4. shelters
-def weighted_decile(income, weight):
-    order = np.argsort(income.to_numpy())
-    w = weight.to_numpy()[order]
-    mid = (np.cumsum(w) - w / 2) / w.sum()
-    dec = np.empty(len(income), dtype=int)
-    dec[order] = np.minimum((mid * 10).astype(int) + 1, 10)
-    return dec
-
-
-def fig_shelters():
-    sec = (bcn.download_sections()
-           .merge(bcn.download_income(2023)[["section_id", "income_eur"]], on="section_id", validate="one_to_one")
-           .merge(bcn.download_population(2024), on="section_id", validate="one_to_one"))
-    shelters = bcn.download_shelters()
-    sec["decile"] = weighted_decile(sec["income_eur"], sec["population"])
-    for r in (400, 800):
-        zone = shelters.buffer(r).union_all()
-        sec[f"pop_{r}"] = sec["population"] * sec.geometry.intersection(zone).area / sec.geometry.area
-    by = sec.groupby("decile").agg(pop=("population", "sum"), p400=("pop_400", "sum"),
-                                   p800=("pop_800", "sum"), inc=("income_eur", "median"))
-    by = by.assign(pct_400=100 * by["p400"] / by["pop"], pct_800=100 * by["p800"] / by["pop"])
-    city = {r: 100 * sec[f"pop_{r}"].sum() / sec["population"].sum() for r in (400, 800)}
-    print("shelters:", len(sec), len(shelters), {k: round(v, 1) for k, v in city.items()},
-          by[["pct_400", "pct_800"]].round(1).loc[[1, 10]].to_dict())
-
-    fig, ax = plt.subplots(figsize=(8.5, 4.8))
-    x = by.index.to_numpy()
-    ax.bar(x, by["pct_800"], color=C["wet"], alpha=0.30, width=0.7, label="within 800 m (about 10 min)")
-    ax.bar(x, by["pct_400"], color=C["wet"], width=0.42, label="within 400 m (about 5 min)")
-    ax.axhline(99, color=C["imports"], lw=1.4, ls="--")
-    ax.text(0.45, 101.5, "City Council: 99% of residents have a shelter within 10 minutes", fontsize=8,
-            color=C["imports"], va="bottom")
-    for d in (1, 10):
-        ax.text(d, by.loc[d, "pct_400"] / 2, f"{by.loc[d, 'pct_400']:.1f}%", ha="center", color="white",
-                fontsize=8, fontweight="bold", rotation=90)
-    ax.set_xticks(x, [f"{d}\n{by.loc[d, 'inc'] / 1000:.0f}k" for d in x])
-    ax.set_xlabel("Income decile (1 = poorest), with median income per person (EUR)")
-    ax.set_ylabel("Residents with a shelter nearby (%)")
-    ax.set_ylim(0, 112)
-    ax.set_yticks(range(0, 101, 20))
-    ax.grid(axis="x", visible=False)
-    ax.set_title("Almost every Barcelona resident lives near a climate shelter, rich or poor")
-    ax.legend(loc="lower left", ncol=2, fontsize=8, facecolor="white", framealpha=0.9, frameon=True)
-    note(fig, f"City-wide: {city[400]:.1f}% within 400 m, {city[800]:.1f}% within 800 m. Straight-line distance; "
-              "population (1 Jan 2024) assumed uniform inside each census section. Source: Open Data BCN.")
-    fig.tight_layout(rect=(0, 0.03, 1, 1))
-    save(fig, "idea2_accessibility_by_income")
-
-
 if __name__ == "__main__":
     fig_drought()
     fig_olive()
-    fig_shelters()
