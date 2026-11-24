@@ -22,17 +22,22 @@ Everything the notebooks need is in this folder, so they run offline. Files writ
 | `Sequera_Catalunya.csv` | Drought status changes per municipality and exploitation unit, 2021-2025 (8,677 rows; hydrological and pluviometric status) | [Transparència Catalunya `TODO`](https://analisi.transparenciacatalunya.cat/) | [Llicència oberta d'ús d'informació - Catalunya](https://administraciodigital.gencat.cat/ca/dades/dades-obertes/informacio-practica/llicencies/) (attribution) | TODO | — |
 | `Quantitat_d_aigua_als_embassaments_Catalunya.csv` | Daily water level, stored volume (hm3) and percentage of capacity in 9 reservoirs of the Catalan internal basins, 2000-2026 (88,308 rows) | [Transparència Catalunya `TODO`](https://analisi.transparenciacatalunya.cat/) | [Llicència oberta d'ús d'informació - Catalunya](https://administraciodigital.gencat.cat/ca/dades/dades-obertes/informacio-practica/llicencies/) (attribution) | TODO | — |
 | `Aigües_subterrànies_de_Catalunya.csv` | Groundwater monitoring: water depth and piezometric level per station and date, with coordinates and municipality (244,538 rows) | [Transparència Catalunya `TODO`](https://analisi.transparenciacatalunya.cat/) | [Llicència oberta d'ús d'informació - Catalunya](https://administraciodigital.gencat.cat/ca/dades/dades-obertes/informacio-practica/llicencies/) (attribution) | TODO | — |
+| `crops_all_years.csv` | Processed crop data of Catalonia, 2008-2025, from yearly xlsx files (`Produccions_comarcals_yyyy.xlsx`). Surface and production per crop, year, cultivation method and comarca, column of codes for each, with yield recomputed as production / area. | [Idescat, Estadística agrària: superfície i producció de cultius per comarca](https://agricultura.gencat.cat/ca/departament/observatori-agroambiental/estadistiques/agricultura/estadistiques-definitives-conreus/) | [Llicència oberta d'ús d'informació - Catalunya](https://administraciodigital.gencat.cat/ca/dades/dades-obertes/informacio-practica/llicencies/) (attribution) | 18-11-2026 | `hug_idescat_loader.py`, `hug_climate_yield.py`, `hug_plots.py`, `hug_load_data.ipynb` |
+| `https://analisi.transparenciacatalunya.cat/resource/7bvh-jvq2.json` | Daily temperature and precipitation of the XEMA weather stations, 2007-2025. Through API. | [Transparència Catalunya `7bvh-jvq2`](https://analisi.transparenciacatalunya.cat/Medi-Ambient/Dades-meteorol-giques-di-ries-de-la-XEMA/7bvh-jvq2/about_data) | [Llicència oberta d'ús d'informació - Catalunya](https://administraciodigital.gencat.cat/ca/dades/dades-obertes/informacio-practica/llicencies/) (attribution) | 10-11-2026 | `hug_climate_yield.py`, `hug_plots.py`, `hug_load_data.ipynb` |
+| `https://analisi.transparenciacatalunya.cat/resource/yqwd-vj5e.json` | XEMA station metadata (code, name, coordinates, comarca). Through API | [Transparència Catalunya `yqwd-vj5e`](https://analisi.transparenciacatalunya.cat/Medi-Ambient/Metadades-estacions-meteorol-giques-autom-tiques/yqwd-vj5e/about_data) | [Llicència oberta d'ús d'informació - Catalunya](https://administraciodigital.gencat.cat/ca/dades/dades-obertes/informacio-practica/llicencies/) (attribution) | 10-11-2026 | `hug_climate_yield.py`, `hug_plots.py`, `hug_load_data.ipynb` |
 
 Notes:
 
 - Numbers in the CSVs use a comma as decimal separator (and a dot for thousands in some columns), so read them with `decimal=","` and `thousands="."`.
 - The municipality code in the fires CSV has no leading zero (e.g. `80018`); pad it to 6 digits before joining with the maps.
+- Comarques names (also refered as counties/regions along the code) change between the Idescat yearly files, so they are harmonised (`harmonise()`). Yield is recomputed as production divided by area. Crop names also vary along the different files. 
+- The XEMA daily data are downloaded through the open data API the first time (`download_daily(2007, 2025)`), so that first run needs internet and may take a while.
 
 ## Repositories of open datasets
 
 ### Open data portals
 
-- [Transparència Catalunya](https://analisi.transparenciacatalunya.cat/) · [ICGC](https://www.icgc.cat/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-cartografica/Divisions-administratives)
+- [Transparència Catalunya](https://analisi.transparenciacatalunya.cat/) · [ICGC](https://www.icgc.cat/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-cartografica/Divisions-administratives) · [Idescat](https://www.idescat.cat/)
 
 - ## How to run
 
@@ -42,6 +47,11 @@ cd <XEMAS->
 uv sync            # or: conda env create -f environment.yml
 uv run jupyter lab
 ```
+
+The crop and weather analysis is in `hug_load_data.ipynb`. It imports the scripts in `src/` (`hug_idescat_loader.py`, `hug_climate_yield.py`, `hug_plots.py`). On the first run, download the daily weather data with `C.download_daily(2007, 2025)` (2007 is needed because the 2008 cereal season starts in October of the previous year). For crop data, there are 2 options:
+- Download xlsx files from [Idescat, Estadística agrària: superfície i producció de cultius per comarca](https://agricultura.gencat.cat/ca/departament/observatori-agroambiental/estadistiques/agricultura/estadistiques-definitives-conreus/) into folder `data/raw/`. 
+- Use the pre-downloaded data in `crops_all_years.csv` and start the analysis in `hug_load_data.ipynb` from section "Using preparated dataset".
+
 ## Figures
 
 | Figure | File | Message |

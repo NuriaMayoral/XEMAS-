@@ -73,32 +73,38 @@ def _fig(*a, **k):
     f.patch.set_facecolor(SURF)
     return f, ax
 
-
-def fig_time(data, crop="Blat", mark=(2008, 2015, 2020, 2023), show_value=False):
-    """This function builds a pannel with the rainfall anomaly (upper) and the yield anomaly (down) in a time series """
-    d = data[data.crop_h == crop].groupby("year")[["e", "dP_rel"]].mean() * 100 # Data is obtained
-    f, (a1, a2) = _fig(2, 1, figsize=(8, 5.6), sharex=True, gridspec_kw={"hspace": 0.18})
-    for ax, col, ttl in ((a1, "dP_rel", f"Season rainfall ({_win(crop)[0]}), relative to the mean"), # Building of the 2 plots
-                         (a2, "e", f"{NAMES.get(crop, crop)} yield, relative to its trend")):
+def fig_time(data, crop="Blat", mark=(2008, 2015, 2020, 2023), show_value=False, save=None, dpi=300):
+    """This function builds a pannel with the rainfall anomaly (upper), the temperature anomaly (middle) and the yield anomaly (down) in a time series """
+    d = data[data.crop_h == crop].groupby("year")[["e", "dP_rel", "dT"]].mean() # Data is obtained
+    d[["e", "dP_rel"]] *= 100 # rainfall and yield in %, the temperature stays in degrees
+    f, (a1, a2, a3) = _fig(3, 1, figsize=(8, 7.6), sharex=True, gridspec_kw={"hspace": 0.18})
+    for ax, col, ttl in ((a1, "dP_rel", f"Season rainfall ({_win(crop)[0]}), relative to the mean"), # Building of the 3 plots
+                         (a2, "dT", f"Season temperature ({_win(crop)[0]}), relative to the mean"),
+                         (a3, "e", f"{NAMES.get(crop, crop)} yield, relative to its trend")):
         v = d[col]
-        ax.bar(d.index, v, width=0.7, color=np.where(v >= 0, BLUE, ORANGE))
+        ax.bar(d.index, v, width=0.7, color=np.where(v >= 0, BLUE, ORANGE) if ax != a2 else np.where(v >= 0, ORANGE, BLUE)) # temperature: warm = orange
         ax.axhline(0, color=INK2, lw=1)
         #ax.set_title(ttl, loc="left", fontsize=11, color=INK)
         if ax == a1:
             ax.set_ylabel("Rainfall anomaly (%)")
+        elif ax == a2:
+            ax.set_ylabel("Temperature anomaly (°C)")
         else:
             ax.set_ylabel("Yield anomaly (%)")
         ax.margins(y=0.25) # we make room for the year labels
         _style(ax)
         for y in mark: # we label only the years we have found that were specially dry or wet
             if y in v.index:
-                txt = f"{y}\n{v[y]:+.0f}%" if show_value else str(y)
+                val = f"{v[y]:+.1f}°C" if ax == a2 else f"{v[y]:+.0f}%"
+                txt = f"{y}\n{val}" if show_value else str(y)
                 dy = 4 if v[y] >= 0 else (-22 if show_value else -11)
                 ax.annotate(txt, (y, v[y]), xytext=(0, dy),
                             textcoords="offset points", ha="center", fontsize=9, color=INK)
-    a2.set_xticks(d.index[::2])
+    a3.set_xticks(d.index[::2])
     #f.legend([Patch(color=BLUE), Patch(color=ORANGE)], ["above normal", "below normal"],
     #         frameon=False, fontsize=9, labelcolor=INK2, ncol=2, loc="lower center", bbox_to_anchor=(0.5, -0.02))
+    if save: # also write the figure to a file, e.g. save="../figures/time_wheat.png"
+        _save(f, save, dpi)
     return _done(f)
 
 
