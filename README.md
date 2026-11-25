@@ -48,7 +48,7 @@ Notes:
 ```console
 git clone https://github.com/NuriaMayoral/XEMAS-.git
 cd <XEMAS->
-uv sync            # or: conda env create -f environment.yml
+pip install -r requirements.txt
 uv run jupyter lab
 ```
 
