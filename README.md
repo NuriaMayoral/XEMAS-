@@ -66,6 +66,9 @@ Gabriel's analysis is the notebook `notebook/gabri_heat_energy_demand.ipynb`, ru
 | energy_demand_vs_temperature | `figures/Gabri/energy_demand_vs_temperature.png` | Shows that catalan electricity demand is flat between 17 and 22 °C and rises faster with heat than with cold. |
 | energy_demand_vs_date | `figures/Gabri/energy_demand_vs_date.png` | Shows that temperature explains more of the daily variation in demand than the date alone (R² = 0.67 against 0.52). |
 | energy_demand_by_hour | `figures/Gabri/energy_demand_by_hour.png` | Shows that heat adds demand in the afternoon, and cold in the morning and evening. |
+| time_panel | `figures/Hug/time_panel.png` | Rainfall, temperature and yield anomalies of wheat by year: dry years such as 2023 coincide with low yields. |
+| scatter_panel | `figures/Hug/scatter._panelpng` | Yield anomaly against rainfall anomaly for four crops: yield increases with rainfall for wheat, with little or no response for olive, and a small decrease for vine. |
+| maps_panel | `figures/Hug/maps_panel.png` | Maps of rainfall and crop yield anomalies per comarca per crop for selected years (2015, 2020, 2023). |
 
 ## Use of AI tools
 
@@ -74,8 +77,13 @@ Claude Sonnet 5.5 was used by Gabriel to:
 - Help with downloading databases.
 - Check and fix code, and suggest using np.clip to do three separate fits in 'notebook/gabri_heat_energy_demand.ipynb'.
 - Help with English wording and grammar in minipaper and presentation.
-Question, analysis choices, figure ideas and full README, minipaper draft and presentation slides were entirely ours.
 
+Claude Sonnet 5.5 was used by Hug to:
+- Help with code writting of data cleaning functions
+- Code fixing and model suggestions
+- Rephrasing suggestions for minipaper
+
+Initial question and database selection, code structure and workflow, analysis and model choices, figure ideas and full README, minipaper draft and presentation slides were entirely ours.
 
 ## Licence
 
