@@ -102,6 +102,13 @@ Claude Sonnet 5.5 was used by Núria to:
 - Find and fix errors in the code.
 - Improve the plots so that they are clear and representative.
 
+Claude Sonnet 5.5 was used by Jesús to:
+- Help with writing code for data cleaning and preparation.
+- Find and fix errors in the code.
+- Improve the plots so that they are clear and representative. Mainly for the interactive map.
+- Correct the English text of the README and the notebook descriptions.
+
+
 
 
 Initial question and database selection, code structure and workflow, analysis and model choices, figure ideas and full README, minipaper draft and presentation slides were entirely ours.
