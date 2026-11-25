@@ -59,12 +59,18 @@ Gabriel's analysis is the notebook `notebook/gabri_heat_energy_demand.ipynb`, ru
 
 Núria's analysis is the notebook `notebook/nuria_load_data.ipynb`, run from the `notebook/` folder. It needs `geopandas` (`uv pip install geopandas`; `psutil` is optional and only used to print memory use). The first run needs internet: reservoirs (`gn9e-3qhr`), official drought status (`i5n8-43cw`) and station metadata (`yqwd-vj5e`) are downloaded from the open data API. The XEMA daily file (33 million rows, all variables) is local and is not in Git because of its size: download it from [Transparència Catalunya `7bvh-jvq2`](https://analisi.transparenciacatalunya.cat/Medi-Ambient/Dades-meteorol-giques-di-ries-de-la-XEMA/7bvh-jvq2/about_data) and set its path in `PATH_XEMA`. The notebook saves the six figures `figures/Nuria/fig1_...` to `fig6_...`.
 
+Jesús's analysis (wildfires) is in two notebooks, `notebook/map_fires_municipalities.ipynb` and `notebook/map_fires_regions.ipynb`, run from the `notebook/` folder. They read the fires CSV and the ICGC boundary files (municipalities and comarcas) from `data/raw/`, so no download is needed once those files are there (see the data table for sources). They need `geopandas` and `folium` (`uv pip install geopandas folium`).
+
+`map_fires_municipalities.ipynb` adds up the forest hectares burned per municipality and joins them with the municipality outlines by code. It saves the static map `figures/Jesus/fires_map_municipalities.png` and the bar chart of the 10 municipalities with the most hectares burned, `figures/Jesus/top_10_municipalities.png`. It also draws an interactive map, shown in the notebook but not saved to a file, with a search box and a tooltip with the burned hectares and the date and size of the largest fire of each municipality. `map_fires_regions.ipynb` does the same per comarca and saves the map `figures/Jesus/fires_map_regions.png`.
+
+In both notebooks the colour scale is logarithmic, and light grey marks the areas with no recorded fires (0 ha). Each notebook explains its steps.
+
 ## Figures
 
 | Figure | File | Message |
 |---|---|---|
-| fires_map_municipalities | `figures/fires_map_municipalities.png` | Map with the forest hectares burned in Catalonia for every municipality for 2011-2024. |
-| fires_map_regions | `figures/fires_map_regions.png` | Map with the forest hectares burned in Catalonia for every comarca for 2011-2024. |
+| fires_map_municipalities | `figures/Jesus/fires_map_municipalities.png` | Map with the forest hectares burned in Catalonia for every municipality for 2011-2024. |
+| fires_map_regions | `figures/Jesus/fires_map_regions.png` | Map with the forest hectares burned in Catalonia for every comarca for 2011-2024. |
 | energy_demand_vs_temperature | `figures/Gabri/energy_demand_vs_temperature.png` | Shows that catalan electricity demand is flat between 17 and 22 °C and rises faster with heat than with cold. |
 | energy_demand_vs_date | `figures/Gabri/energy_demand_vs_date.png` | Shows that temperature explains more of the daily variation in demand than the date alone (R² = 0.67 against 0.52). |
 | energy_demand_by_hour | `figures/Gabri/energy_demand_by_hour.png` | Shows that heat adds demand in the afternoon, and cold in the morning and evening. |
@@ -77,7 +83,8 @@ Núria's analysis is the notebook `notebook/nuria_load_data.ipynb`, run from the
 | fig4_official_status | `figures/Nuria/fig4_official_status.png` | The official rainfall status warned first; the official hydrological status followed the reservoir level. |
 | fig5_map_rainfall | `figures/Nuria/fig5_map_rainfall.png` | Map of rainfall compared with normal during the 2021 drought, interpolated between XEMA stations, with the minimum level reached by each reservoir. |
 | fig6_maps_municipality_comarca | `figures/Nuria/fig6_maps_municipality_comarca.png` | Maps of the worst official drought status per municipality and the mean SPI-6 rainfall deficit per comarca during the 2021 drought. |
-
+| top_10_municipalities.png | `figures/Jesus/top_10_municipalities.png` | Bar chart of the 10 municipalities with the most forest hectares burned in Catalonia between 2011 and 2024. |
+| fires_map_interactive | `figures/Jesus/fires_map_interactive.html` | Interactive map of the forest hectares burned in Catalonia for every municipality for 2011-2024, with a search box and the date and size of the largest fire of each municipality. |
 ## Use of AI tools
 
 Claude Sonnet 5.5 was used by Gabriel to:
