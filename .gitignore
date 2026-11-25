@@ -218,7 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
-data/raw/
+#data/raw/
 data/processed/
 
 # macOS and R files
@@ -231,4 +231,4 @@ data/processed/
 # Gabri's work
 paper/
 presentation/
-.vscode/
+
