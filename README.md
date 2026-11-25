@@ -64,8 +64,6 @@ Jesús's analysis (wildfires) is in two notebooks, `notebook/map_fires_municipal
 
 `map_fires_municipalities.ipynb` adds up the forest hectares burned per municipality and joins them with the municipality outlines by code. It saves the static map `figures/Jesus/fires_map_municipalities.png` and the bar chart of the 10 municipalities with the most hectares burned, `figures/Jesus/top_10_municipalities.png`. It also draws an interactive map, shown in the notebooksaved as `figures/Jesus/fires_map_interactive.html`, with a search box and a tooltip with the burned hectares and the date and size of the largest fire of each municipality. `map_fires_regions.ipynb` does the same per comarca and saves the static map `figures/Jesus/fires_map_regions.png`.
 
-In both notebooks the colour scale is logarithmic, and light grey marks the areas with no recorded fires (0 ha). Each notebook explains its steps.
-
 ## Figures
 
 | Figure | File | Message |
