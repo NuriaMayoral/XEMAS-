@@ -50,7 +50,7 @@ The same 912 days against the day of the year, coloured by temperature (coolwarm
 (a) Mean hourly demand profile on cold (< 12 °C), mild (17-22 °C) and hot (> 25 °C) days. (b) Demand at each hour and 2 °C temperature bin, as % above mild days at the same hour.
 
 - **Data:** hourly columns `h01`-`h24` of `hx6q-ykhb` (MWh in each hour; `notebook/xema.py`, `download_demand_hourly`), taken as hours 0-23. The 24 hours add up exactly to the daily totals used above. Temperature is the daily mean at X4. Same 912 weekdays (no clock-change day falls among them); bins with fewer than 5 days hidden.
-- **First reading:** heat adds most in the afternoon (up to about +35-40% around 13-17 h on days above 28 °C) and also keeps nights high; cold adds most in the morning (8-10 h) and evening peak (19-21 h).
+- **First reading:** heat adds most in the afternoon, 13-17 h: about +31-34% on days of 28-30 °C and +36-40% on days of 30-32 °C (6 days), and it also keeps nights high. Cold adds most in the morning (8-11 h) and in the evening (18-20 h): about +24-26% on days of 8-10 °C.
 - **Limits:** daily mean temperature, not hourly; the hour convention of `h01` (00-01 h) is assumed and should be checked in the dataset documentation. Next step: hourly temperature from XEMA.
 
 ## hydro_vs_reservoirs (.png): supporting figure
