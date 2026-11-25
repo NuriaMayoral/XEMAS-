@@ -34,7 +34,7 @@ Notes:
 - The municipality code in the fires CSV has no leading zero (e.g. `80018`); pad it to 6 digits before joining with the maps.
 - Comarques names (also refered as counties/regions along the code) change between the Idescat yearly files, so they are harmonised (`harmonise()`). Yield is recomputed as production divided by area. Crop names also vary along the different files. 
 - The XEMA daily data are downloaded through the open data API the first time (`download_daily(2007, 2025)`), so that first run needs internet and may take a while.
-- The `raw/` files of Gabriel's rows are not in Git (`data/raw/` is git-ignored). `notebook/xema.py` downloads each one from its API the first time the notebook asks for it and saves it as CSV in `data/raw/`; later runs read that copy. So the first run needs internet, and anyone can rebuild the files by running the notebook. No API key is needed.
+- The `raw/` files of Gabriel's rows are not in Git (`data/raw/` is git-ignored). `src/xema.py` downloads each one from its API the first time the notebook asks for it and saves it as CSV in `data/raw/`; later runs read that copy. So the first run needs internet, and anyone can rebuild the files by running the notebook. No API key is needed.
 
 ## Repositories of open datasets
 
@@ -55,7 +55,7 @@ The crop and weather analysis is in `hug_load_data.ipynb`. It imports the script
 - Download xlsx files from [Idescat, Estadística agrària: superfície i producció de cultius per comarca](https://agricultura.gencat.cat/ca/departament/observatori-agroambiental/estadistiques/agricultura/estadistiques-definitives-conreus/) into folder `data/raw/`. 
 - Use the pre-downloaded data in `crops_all_years.csv` and start the analysis in `hug_load_data.ipynb` from section "Using preparated dataset".
 
-Gabriel's analysis is the notebook `notebook/gabri_heat_energy_demand.ipynb`, run from the `notebook/` folder. It imports `xema.py` (download and cache helpers) and uses pandas, numpy, matplotlib, requests and holidays (`uv pip install -r requirements.txt holidays`). The first run downloads the raw data (see the notes under the data table). It saves the three figures `figures/Gabri/energy_demand_*.png`; the notebook explains each one and its limits.
+Gabriel's analysis is the notebook `notebook/gabri_heat_energy_demand.ipynb`, run from the `notebook/` folder. It imports `src/xema.py` (download and cache helpers) and uses pandas, numpy, matplotlib, requests and holidays (`uv pip install -r requirements.txt holidays`). The first run downloads the raw data (see the notes under the data table). It saves the three figures `figures/Gabri/energy_demand_*.png`; the notebook explains each one and its limits.
 
 ## Figures
 

@@ -98,7 +98,7 @@ We report demand as a percentage of the base load, $100\,(D/\beta_0 - 1)$, so th
 
 \textbf{Other stations.} We repeated the fit with the temperature of stations X8 and D5 on the same days.
 
-\textbf{Code and reproducibility.} All code is in the public repository \url{https://github.com/NuriaMayoral/XEMAS-}, in the notebook \texttt{gabri\_heat\_energy\_demand.ipynb} of the folder \texttt{notebook/}. The functions in \texttt{xema.py}, in the same folder, download each dataset through the API and save it as CSV in \texttt{data/raw/}, which is not versioned. To reproduce every number and figure: clone the repository, install the environment (\texttt{pip install -r requirements.txt holidays}) and run the notebook from the \texttt{notebook/} folder (\emph{Restart \& Run All}); the first run downloads the data. The analysis uses pandas, NumPy and Matplotlib \cite{pandas,numpy,matplotlib}.
+\textbf{Code and reproducibility.} All code is in the public repository \url{https://github.com/NuriaMayoral/XEMAS-}, in the notebook \texttt{gabri\_heat\_energy\_demand.ipynb} of the folder \texttt{notebook/}. The functions in \texttt{src/xema.py} download each dataset through the API and save it as CSV in \texttt{data/raw/}, which is not versioned. To reproduce every number and figure: clone the repository, install the environment (\texttt{pip install -r requirements.txt holidays}) and run the notebook from the \texttt{notebook/} folder (\emph{Restart \& Run All}); the first run downloads the data. The analysis uses pandas, NumPy and Matplotlib \cite{pandas,numpy,matplotlib}.
 
 \section{Results}
 
