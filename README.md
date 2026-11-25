@@ -1,12 +1,12 @@
-# Project title
+# Drought and heat in Catalonia: effects on water, crops, forest fires and electricity
 
-*One sentence: the question your project answers.*
+*How do drought and heat in Catalonia affect water reserves, crops, forest fires and electricity use?*
 
 **Team:** Gabriel Albasini (@gabrielvalbasini-lab) · Núria Mayoral (@NuriaMayoral) · Jesús Ruiz (@jesusruango-dev) · Hug Sala (@hugsalaoriol)
 
 ## Question
 
-How do drought and heat in Catalonia show up in water reserves, crops, forest fires and electricity use? We combine daily weather data from the XEMA stations of the Catalan Meteorological Service with other open data from the Generalitat de Catalunya and Idescat. Each member studies one effect: the chain from a rainfall deficit to low reservoirs and an official drought status (Núria), crop yields in dry and hot years (Hug), the area burned by forest fires (Jesús), and electricity demand on hot and cold days (Gabriel). Knowing when and how strongly these effects appear can help to plan for dry and hot periods.
+How do drought and heat in Catalonia affect water reserves, crops, forest fires and electricity use? We use daily data from the XEMA weather stations and other open data from the Generalitat de Catalunya and Idescat. Each member studies one effect: reservoirs and drought status (Núria), crop yields (Hug), burned area (Jesús) and electricity demand (Gabriel). Knowing when these effects appear can help to plan for dry and hot periods.
 
 # Data
 
