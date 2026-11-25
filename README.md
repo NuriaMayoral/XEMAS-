@@ -55,7 +55,7 @@ The crop and weather analysis is in `hug_load_data.ipynb`. It imports the script
 - Download xlsx files from [Idescat, Estadística agrària: superfície i producció de cultius per comarca](https://agricultura.gencat.cat/ca/departament/observatori-agroambiental/estadistiques/agricultura/estadistiques-definitives-conreus/) into folder `data/raw/`. 
 - Use the pre-downloaded data in `crops_all_years.csv` and start the analysis in `hug_load_data.ipynb` from section "Using preparated dataset".
 
-Gabriel's analysis is the notebook `notebook/gabri_heat_energy_demand.ipynb`, run from the `notebook/` folder. It imports `xema.py` (download and cache helpers) and uses pandas, numpy, matplotlib, requests and holidays (`uv pip install -r requirements.txt holidays`). The first run downloads the raw data (see the notes under the data table). It saves the three figures `figures/Gabri/energy_demand_*.png`; what each one shows and its limits are in `figures/README.md`.
+Gabriel's analysis is the notebook `notebook/gabri_heat_energy_demand.ipynb`, run from the `notebook/` folder. It imports `xema.py` (download and cache helpers) and uses pandas, numpy, matplotlib, requests and holidays (`uv pip install -r requirements.txt holidays`). The first run downloads the raw data (see the notes under the data table). It saves the three figures `figures/Gabri/energy_demand_*.png`; the notebook explains each one and its limits.
 
 ## Figures
 
