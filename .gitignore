@@ -226,6 +226,8 @@ data/processed/
 .Rhistory
 
 # Visual Studio
-.vscode
+.vscode/
 
+# Gabri's work
 paper/
+presentation/
